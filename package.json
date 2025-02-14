@@ -3,6 +3,11 @@
   "displayName": "Auto Fold Imports",
   "description": "An extension to auto fold imports in JSX and TSX files.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adriandrs/autofold-imports"
+  },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.97.0"
   },

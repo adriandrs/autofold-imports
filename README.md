@@ -42,6 +42,10 @@ The extension provides several configuration options to control its behavior:
 
 Contributions are welcome! If you have any ideas, suggestions, or bug reports, please create an issue or submit a pull request on [GitHub](https://github.com/your-repo/auto-fold-imports).
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE.txt) file for details.
+
 ## Author
 
 Developed by [Adrian Santelis](https://github.com/adriandrs).
