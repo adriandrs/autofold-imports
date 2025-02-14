@@ -3,26 +3,16 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
     console.log('La extensión para colapsar imports está activa.');
 
-    const config = vscode.workspace.getConfiguration('autofoldImports');
+    // Evento que se dispara cuando se abre un archivo o se cambia el editor activo
+    vscode.workspace.onDidOpenTextDocument(handleDocument);
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+        if (editor) {
+            handleDocument(editor.document);
+        }
+    });
 
-    if (config.get('onStartOrOpen')) {
-        // Evento que se dispara cuando se abre un archivo
-        vscode.workspace.onDidOpenTextDocument(handleDocument);
-    }
-
-    if (config.get('onEditorChange')) {
-        // Evento que se dispara cuando se cambia el editor activo
-        vscode.window.onDidChangeActiveTextEditor((editor) => {
-            if (editor) {
-                handleDocument(editor.document);
-            }
-        });
-    }
-
-    if (config.get('onSave')) {
-        // Evento que se dispara cuando se guarda un archivo
-        vscode.workspace.onDidSaveTextDocument(handleDocument);
-    }
+    // Evento que se dispara cuando se guarda un archivo
+    vscode.workspace.onDidSaveTextDocument(handleDocument);
 
     // Comando para colapsar manualmente los imports
     let disposable = vscode.commands.registerCommand('autofold-imports.collapseImports', () => {
@@ -34,12 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
-    // Colapsar imports en el documento actualmente abierto si onStartOrOpen está activado
-    if (config.get('onStartOrOpen')) {
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            handleDocument(editor.document);
-        }
+    // Colapsar imports en el documento actualmente abierto
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        handleDocument(editor.document);
     }
 }
 
@@ -55,20 +43,31 @@ function collapseImports(document: vscode.TextDocument) {
         return;
     }
 
-    const importRegex = /^import\s[\s\S]+?from\s.+?;$/gm;
+    const importRegex = /^import\s.*?from\s['"].*?['"];?$/gm;
     const text = document.getText();
     let match;
 
-    // Busca todos los imports y colapsa cada uno
-    while ((match = importRegex.exec(text)) !== null) {
-        const startPos = document.positionAt(match.index);
-        const endPos = document.positionAt(match.index + match[0].length);
-        const range = new vscode.Range(startPos, endPos);
+    // Guarda la selección actual del editor para restaurarla después de colapsar
+    const originalSelections = editor.selections;
 
-        // Colapsa el rango de los imports
-        vscode.commands.executeCommand('editor.fold', { selection: range });
-        console.log(`Import colapsado en el rango: ${range.start.line + 1}-${range.end.line + 1}`);
-    }
+    editor.edit((editBuilder) => {
+        const foldRanges = [];
+        while ((match = importRegex.exec(text)) !== null) {
+            const startPos = document.positionAt(match.index);
+            const endPos = document.positionAt(match.index + match[0].length);
+            const range = new vscode.Range(startPos, endPos);
+            foldRanges.push(range);
+        }
+
+        for (const range of foldRanges) {
+            editor.selection = new vscode.Selection(range.start, range.end);
+            vscode.commands.executeCommand('editor.fold');
+            console.log(`Import colapsado en el rango: ${range.start.line + 1}-${range.end.line + 1}`);
+        }
+    }).then(() => {
+        // Restaura las selecciones originales después de colapsar
+        editor.selections = originalSelections;
+    });
 }
 
 export function deactivate() {}

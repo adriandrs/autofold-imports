@@ -2,9 +2,7 @@
 
 ## Description
 
-Auto Fold Imports is a Visual Studio Code extension designed to automatically fold import statements in JSX and TSX files.
-
-This helps to keep your code clean and organized by hiding the clutter of import statements, allowing you to focus on the main logic of your code.
+Auto Fold Imports is a Visual Studio Code extension designed to automatically fold import statements in JSX and TSX files. This helps to keep your code clean and organized by hiding the clutter of import statements, allowing you to focus on the main logic of your code.
 
 ## Features
 
@@ -40,11 +38,11 @@ The extension provides several configuration options to control its behavior:
 
 ## Contribution
 
-Contributions are welcome! If you have any ideas, suggestions, or bug reports, please create an issue or submit a pull request on [GitHub](https://github.com/your-repo/auto-fold-imports).
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please create an issue or submit a pull request on [GitHub](https://github.com/adriandrs/auto-fold-imports).
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](../LICENSE.txt) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Author
 

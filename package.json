@@ -1,8 +1,9 @@
 {
   "name": "autofold-imports",
-  "displayName": "Auto Fold Imports",
+  "displayName": "Automatic Fold Imports",
   "description": "An extension to auto fold imports in JSX and TSX files.",
   "version": "0.0.1",
+  "publisher": "adriandrs",
   "repository": {
     "type": "git",
     "url": "https://github.com/adriandrs/autofold-imports"
